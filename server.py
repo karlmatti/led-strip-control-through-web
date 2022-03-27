@@ -3,7 +3,6 @@ import time
 from rpi_ws281x import PixelStrip, Color
 
 app = Flask(__name__)
-state = {'isActive': False}
 strip = PixelStrip(60, 18, 800000, 10, False, 150, 0)
 strip.begin()
 
@@ -66,42 +65,57 @@ def theaterChaseRainbow(strip, wait_ms=50):
                 strip.setPixelColor(i + q, 0)
 
 
-def start():
-    try:
-        while state['isActive']:
-            print('Color wipe animations.')
-            colorWipe(strip, Color(255, 0, 0))  # Red wipe
-            colorWipe(strip, Color(0, 255, 0))  # Green wipe
-            colorWipe(strip, Color(0, 0, 255))  # Blue wipe
+def clearWipe():
+    colorWipe(strip, Color(0, 0, 0), 10)
 
-            print('Theater chase animations.')
-            theaterChase(strip, Color(127, 127, 127))  # White theater chase
-            theaterChase(strip, Color(127, 0, 0))  # Red theater chase
-            theaterChase(strip, Color(0, 0, 127))  # Blue theater chase
 
-            print('Rainbow animations.')
-            rainbow(strip)
-            rainbowCycle(strip)
-            theaterChaseRainbow(strip)
-    except RuntimeError:
-        colorWipe(strip, Color(0, 0, 0), 10)
+def showColorWipes():
+    colorWipe(strip, Color(255, 0, 0))  # Red wipe
+    colorWipe(strip, Color(0, 255, 0))  # Green wipe
+    colorWipe(strip, Color(0, 0, 255))  # Blue wipe
+    clearWipe()
+
+
+def showTheatherChases():
+    theaterChase(strip, Color(127, 127, 127))  # White theater chase
+    theaterChase(strip, Color(127, 0, 0))  # Red theater chase
+    theaterChase(strip, Color(0, 0, 127))  # Blue theater chase
+    clearWipe()
+
+
+def showRainbowEffects():
+    rainbow(strip)
+    rainbowCycle(strip)
+    theaterChaseRainbow(strip)
+    clearWipe()
+
+
+def runAll():
+    showColorWipes()
+    showTheatherChases()
+    showRainbowEffects()
 
 
 @app.route('/', methods=['GET'])
 def fetchForm():
-    return render_template('form.html', status=state['isActive'], actionButton=state['isActive'])
+    return render_template('form.html')
 
 
-@app.route('/', methods=['POST'])
-def submitForm():
-    state['isActive'] = not state['isActive']
-    print('Current state:', state['isActive'])
-    if state['isActive']:
-        print('STARTING')
-        start()
-        print('STARTING - END')
+@app.route('/show/<effect>', methods=['POST'])
+def submitForm(effect):
+    if effect == 'wipe':
+        showColorWipes()
+    elif effect == 'theather':
+        showTheatherChases()
+    elif effect == 'rainbow':
+        showRainbowEffects()
+    else:
+        abort(404)
 
-    return render_template('form.html', status=state['isActive'], actionButton=state['isActive'])
+
+@app.errorhandler(404)
+def pageNotFound(error):
+    return render_template('404.html', title='404'), 404
 
 
 if __name__ == '__main__':
