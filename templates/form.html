@@ -1,10 +1,73 @@
+<html>
+<header>
+    <title>LED STRIP CONTROLLER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            color: #072258;
+            text-align: center;
+        }
+        button {
+            color: white;
+            font-size: 15px;
+            background-color: #072258;
+            height: 100%;
+            width: 100%;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            padding: 10px;
+        }
+        .grid-item {
+            padding: 5px;
+            font-size: 30px;
+            text-align: center;
+        }
+        .fa {
+            margin-left: -12px;
+            margin-right: 8px;
+        }
+    </style>
+</header>
+<body>
 <h1>Raspberry PI LEDs</h1>
-<form action="/show/wipe" method="POST">
-    <button type="submit">WIPE</button>
-</form>
-<form action="/show/theather" method="POST">
-    <button type="submit">THEATHER</button>
-</form>
-<form action="/show/rainbow" method="POST">
-    <button type="submit">RAINBOW</button>
-</form>
+<h2>Select effect for led strip</h2>
+<div class="grid-container">
+    <div class="grid-item">
+        <form action="/show/wipe" method="POST">
+            <button id="wipe" type="submit">WIPE</button>
+        </form>
+    </div>
+
+    <div class="grid-item">
+        <form action="/show/theather" method="POST">
+            <button id="theather" type="submit">THEATHER</button>
+        </form>
+    </div>
+
+    <div class="grid-item">
+        <form action="/show/rainbow" method="POST">
+            <button id="rainbow" type="submit">RAINBOW</button>
+        </form>
+    </div>
+</div>
+ <script>
+        function toggleLoadingIcon(buttonId) {
+            const button = document.getElementById(buttonId);
+            button.innerHTML = '';
+            if (button.childElementCount === 0) {
+                const loadingIcon = document.createElement("i");
+                loadingIcon.className = "fa fa-spinner fa-spin";
+                button.appendChild(loadingIcon)
+            }
+            button.innerHTML += buttonId.toUpperCase();
+        }
+
+        document.getElementById("wipe").onclick = () => toggleLoadingIcon("wipe");
+        document.getElementById("theather").onclick = () => toggleLoadingIcon("theather");
+        document.getElementById("rainbow").onclick = () => toggleLoadingIcon("rainbow");
+    </script>
+</body>
+</html>
