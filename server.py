@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 import time
 from rpi_ws281x import PixelStrip, Color
 
