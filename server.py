@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, abort
 import time
 from rpi_ws281x import PixelStrip, Color
 
@@ -110,7 +110,7 @@ def showEffect(effect):
     elif effect == 'rainbow':
         showRainbowEffects()
     else:
-        return pageNotFound(error)
+        abort(404)
     return redirect(url_for('fetchForm'))
 
 
