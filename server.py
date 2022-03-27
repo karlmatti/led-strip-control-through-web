@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, url_for
 import time
 from rpi_ws281x import PixelStrip, Color
 
@@ -111,7 +111,7 @@ def showEffect(effect):
         showRainbowEffects()
     else:
         abort(404)
-    return redirect("/", code=302)
+    return redirect(url_for('fetchForm'))
 
 
 @app.errorhandler(404)
