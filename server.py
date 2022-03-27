@@ -102,7 +102,7 @@ def fetchForm():
 
 
 @app.route('/show/<effect>', methods=['POST'])
-def submitForm(effect):
+def showEffect(effect):
     if effect == 'wipe':
         showColorWipes()
     elif effect == 'theather':
@@ -111,6 +111,7 @@ def submitForm(effect):
         showRainbowEffects()
     else:
         abort(404)
+    return render_template('form.html')
 
 
 @app.errorhandler(404)
