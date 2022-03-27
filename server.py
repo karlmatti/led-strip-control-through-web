@@ -111,7 +111,7 @@ def showEffect(effect):
         showRainbowEffects()
     else:
         abort(404)
-    return render_template('form.html')
+    return redirect("/", code=302)
 
 
 @app.errorhandler(404)
