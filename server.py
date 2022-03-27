@@ -110,7 +110,7 @@ def showEffect(effect):
     elif effect == 'rainbow':
         showRainbowEffects()
     else:
-        abort(404)
+        return pageNotFound(error)
     return redirect(url_for('fetchForm'))
 
 
